@@ -1,0 +1,26 @@
+﻿{
+  "PackageData": [
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "4bff9bae-6012-4401-a5cc-9d91014d006b"
+        },
+        {
+          "SchemaColumnUId": "0e3d3857-2203-40e4-b1ec-8e972007650e",
+          "Value": "c10fb747-57f1-4790-aad3-c3f4da6d6c58",
+          "DisplayValue": "Studio"
+        },
+        {
+          "SchemaColumnUId": "991cf5ef-ffb8-49a5-add3-074a595f6c43",
+          "Value": "f0d987d0-b664-44c1-b7e9-9c8b841eeb8d",
+          "DisplayValue": "Realty"
+        },
+        {
+          "SchemaColumnUId": "bd12ea8e-2bc2-42bf-925a-3ab766cc0b9f",
+          "Value": 26
+        }
+      ]
+    }
+  ]
+}
