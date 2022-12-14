@@ -14,7 +14,16 @@ define("UsrRealty1Page", [], function() {
 			}
 		}/**SCHEMA_DETAILS*/,
 		businessRules: /**SCHEMA_BUSINESS_RULES*/{}/**SCHEMA_BUSINESS_RULES*/,
-		methods: {},
+		methods: {
+			onMyButtonClick: function() {
+				this.console.log("PUSH! button pressed.");
+				this.showInformationDialog("Our button works!");
+			},
+			getMyButtonEnabled: function() {
+				var result = true;
+				return result;
+			}
+		},
 		dataModels: /**SCHEMA_DATA_MODELS*/{}/**SCHEMA_DATA_MODELS*/,
 		diff: /**SCHEMA_DIFF*/[
 			{
@@ -40,7 +49,7 @@ define("UsrRealty1Page", [], function() {
 				"name": "FLOATd01a79ef-c318-4764-878b-613546cf3802",
 				"values": {
 					"layout": {
-						"colSpan": 24,
+						"colSpan": 16,
 						"rowSpan": 1,
 						"column": 0,
 						"row": 1,
@@ -71,6 +80,37 @@ define("UsrRealty1Page", [], function() {
 				"propertyName": "items",
 				"index": 2
 			},
+            /* Metadata to add the custom button to the page. */
+            {
+                /*  Run the operation that inserts the element to the page. */
+                "operation": "insert",
+                /* The meta name of the parent container to add the button. */
+                "parentName": "ProfileContainer",
+                /* Add the button to the element collection of the parent element. */
+                "propertyName": "items",
+                /* The meta name of the added button. */
+                "name": "MyButton",
+                /* The properties to pass to the element’s constructor. */
+                "values": {
+					"layout": {
+						"colSpan": 10,
+						"rowSpan": 1,
+						"column": 0,
+						"row": 3,
+						"layoutName": "ProfileContainer"
+					},
+                    /* Set the type of the added element to ‘button.’ */
+                    "itemType": Terrasoft.ViewItemType.BUTTON,
+                    /* Bind the button title to the localizable schema string. */
+                    "caption": {bindTo: "Resources.Strings.MyButtonCaption"},
+                    /* Bind the button click handler method. */
+                    "click": {bindTo: "onMyButtonClick"},
+                    /* Bind the button availability property. */
+                    "enabled": {bindTo: "getMyButtonEnabled"},
+                    /* The display style of the button. */
+                    "style": Terrasoft.controls.ButtonEnums.style.BLUE
+                }
+            },
 			{
 				"operation": "insert",
 				"name": "LOOKUP8bc0de44-1533-4599-8c2a-4f90e667072f",
