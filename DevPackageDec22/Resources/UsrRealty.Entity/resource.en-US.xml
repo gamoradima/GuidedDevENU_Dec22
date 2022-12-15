@@ -4,7 +4,9 @@
 		<Items>
 			<Item Name="Caption" Value="Realty" />
 			<Item Name="Columns.UsrArea.Caption" Value="Area, sqft" />
+			<Item Name="Columns.UsrCity.Caption" Value="City" />
 			<Item Name="Columns.UsrComment.Caption" Value="Comment" />
+			<Item Name="Columns.UsrCountry.Caption" Value="Country" />
 			<Item Name="Columns.UsrName.Caption" Value="Name" />
 			<Item Name="Columns.UsrNotes.Caption" Value="Notes" />
 			<Item Name="Columns.UsrOfferType.Caption" Value="Offer type" />

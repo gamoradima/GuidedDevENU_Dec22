@@ -4,6 +4,8 @@
 		<Items>
 			<Item Name="Caption" Value="Edit page: &quot;Realty&quot;" />
 			<Item Name="LocalizableStrings.MyButtonCaption.Value" Value="PUSH!" />
+			<Item Name="LocalizableStrings.Tab44daa37bTabLabelTabCaption.Value" Value="Visits" />
+			<Item Name="LocalizableStrings.UsrMyRealtyDetailDetailCaptionOnPage.Value" Value="Realty visit" />
 		</Items>
 	</Group>
 </Resources>
