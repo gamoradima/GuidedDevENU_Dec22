@@ -10,6 +10,7 @@
 			<Item Name="Columns.UsrName.Caption" Value="Name" />
 			<Item Name="Columns.UsrNotes.Caption" Value="Notes" />
 			<Item Name="Columns.UsrOfferType.Caption" Value="Offer type" />
+			<Item Name="Columns.UsrOwner.Caption" Value="Owner" />
 			<Item Name="Columns.UsrPriceUSD.Caption" Value="Price, USD" />
 			<Item Name="Columns.UsrType.Caption" Value="Type" />
 		</Items>

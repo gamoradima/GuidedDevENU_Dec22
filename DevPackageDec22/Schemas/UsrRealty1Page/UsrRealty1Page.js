@@ -6,6 +6,44 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 				"dataValueType": Terrasoft.DataValueType.BOOLEAN,
 				"type": Terrasoft.ViewModelColumnType.VIRTUAL_COLUMN,
 				"value": false
+			},
+			"CommissionUSD": {
+				"dataValueType": Terrasoft.DataValueType.FLOAT,
+				"type": Terrasoft.ViewModelColumnType.VIRTUAL_COLUMN,
+				"value": 0,
+				"caption": "Commission, USD",
+                dependencies: [
+                    {
+                        /* The [CommissionUSD] column value depends on the [UsrPriceUSD] and [UsrOfferType] column values. */
+                        columns: ["UsrPriceUSD", "UsrOfferType"],
+                        /* The handler method that is called when the [UsrPriceUSD] or [UsrOfferType] column value changes. */
+                        methodName: "calculateCommission"
+                    }
+                ]
+			},
+			"UsrOfferType": {
+				lookupListConfig: {
+					columns: ["UsrCommissionMultiplier"]
+				}
+			},
+			"UsrOwner": {			// select id, name from Contact 
+									// WHERE exists (select id from UsrMyRealtyVisit where UsrOwnerId = Contact.Id
+									// 		AND UsrMyRealtyVisit.UsrParentRealtyId = MAIN_REALTY_ID)
+				dataValueType: Terrasoft.DataValueType.LOOKUP,
+				lookupListConfig: {
+                    "filters": [
+                        function() {
+                            var filterGroup = Ext.create("Terrasoft.FilterGroup");
+							var subFilters = this.Terrasoft.createFilterGroup();
+							subFilters.addItem(this.Terrasoft.createColumnFilterWithParameter(
+								this.Terrasoft.ComparisonType.EQUAL, "UsrParentRealty", this.get("Id")));
+
+							var filter = Terrasoft.createExistsFilter("[UsrMyRealtyVisit:UsrOwner:Id].Id", subFilters); 
+							filterGroup.add("MainFilter", filter);
+                            return filterGroup;
+                        }
+                    ]
+                }
 			}
 		},
 		modules: /**SCHEMA_MODULES*/{}/**SCHEMA_MODULES*/,
@@ -92,9 +130,42 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 			}
 		}/**SCHEMA_BUSINESS_RULES*/,
 		methods: {
+			positiveValueValidator: function(value, column) {
+				var msg = "";
+				if (value < 0) {
+					msg = this.get("Resources.Strings.ValueMustBeGreaterThanZero");
+				}
+				return {
+					invalidMessage: msg
+				};
+			},
+			setValidationConfig: function() {
+				this.callParent(arguments);
+				this.addColumnValidator("UsrPriceUSD", this.positiveValueValidator);
+				this.addColumnValidator("UsrArea", this.positiveValueValidator);
+			},
+			calculateCommission: function() {
+				var price = this.get("UsrPriceUSD");
+				if (!price) {
+					price = 0;
+				}
+				var offerTypeObject = this.get("UsrOfferType");
+				var coeff = 0;
+				if (offerTypeObject) {
+					coeff = offerTypeObject.UsrCommissionMultiplier;
+				}
+				var commission = price * coeff;
+				this.set("CommissionUSD", commission);
+			},
 			onMyButtonClick: function() {
 				this.console.log("PUSH! button pressed.");
 				this.showInformationDialog("Our button works!");
+				
+				var ownerObject = {
+					value: Terrasoft.SysValue.CURRENT_USER_CONTACT.value,
+					displayValue: Terrasoft.SysValue.CURRENT_USER_CONTACT.displayValue
+				};
+				this.set("UsrOwner", ownerObject);
 			},
 			getMyButtonEnabled: function() {
 				var result = true;
@@ -103,6 +174,7 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 			onEntityInitialized: function() {
 				this.callParent(arguments);
 				this.setEditPriceAttribute();
+				this.calculateCommission();
 			},
 			setEditPriceAttribute: function() {
 				var config = {
@@ -172,13 +244,31 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 			},
 			{
 				"operation": "insert",
-				"name": "MyButton",
+				"name": "FLOAT4824a726-a95e-4511-b23d-eb1430047868",
 				"values": {
 					"layout": {
 						"colSpan": 24,
 						"rowSpan": 1,
 						"column": 0,
 						"row": 3,
+						"layoutName": "ProfileContainer"
+					},
+					"bindTo": "CommissionUSD",
+					"enabled": false
+				},
+				"parentName": "ProfileContainer",
+				"propertyName": "items",
+				"index": 3
+			},
+			{
+				"operation": "insert",
+				"name": "MyButton",
+				"values": {
+					"layout": {
+						"colSpan": 24,
+						"rowSpan": 1,
+						"column": 0,
+						"row": 4,
 						"layoutName": "ProfileContainer"
 					},
 					"itemType": 5,
@@ -195,7 +285,7 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 				},
 				"parentName": "ProfileContainer",
 				"propertyName": "items",
-				"index": 3
+				"index": 4
 			},
 			{
 				"operation": "insert",
@@ -240,7 +330,7 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 				"name": "STRING7f6f6beb-7740-4726-8c6c-088e825202e3",
 				"values": {
 					"layout": {
-						"colSpan": 24,
+						"colSpan": 12,
 						"rowSpan": 2,
 						"column": 0,
 						"row": 1,
@@ -291,6 +381,25 @@ define("UsrRealty1Page", ["RightUtilities"], function(RightUtilities) {
 				"parentName": "Header",
 				"propertyName": "items",
 				"index": 4
+			},
+			{
+				"operation": "insert",
+				"name": "LOOKUPc875948e-b407-449e-8677-bf613046e749",
+				"values": {
+					"layout": {
+						"colSpan": 12,
+						"rowSpan": 1,
+						"column": 12,
+						"row": 1,
+						"layoutName": "Header"
+					},
+					"bindTo": "UsrOwner",
+					"enabled": true,
+					"contentType": 5
+				},
+				"parentName": "Header",
+				"propertyName": "items",
+				"index": 5
 			},
 			{
 				"operation": "insert",
